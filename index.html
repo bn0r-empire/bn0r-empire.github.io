@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BinPaste - Share Your Code & Text</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="stars"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo-section">
+                <h1 class="logo">
+                    <span class="logo-bracket">[</span>
+                    <span class="logo-text">BinPaste</span>
+                    <span class="logo-bracket">]</span>
+                </h1>
+                <p class="tagline">// Anonymous Text & Code Sharing</p>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-link active" data-page="home">Home</a>
+                <a href="#" class="nav-link" data-page="recent">Recent</a>
+                <a href="#" class="nav-link" data-page="about">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Home Page -->
+            <div id="home-page" class="page active">
+                <div class="hero-section">
+                    <div class="glitch-text" data-text="Welcome to BinPaste">Welcome to BinPaste</div>
+                    <p class="hero-subtitle">Share code, logs, and text anonymously</p>
+                    <div class="stats-bar">
+                        <div class="stat-item">
+                            <span class="stat-value" id="total-pastes">0</span>
+                            <span class="stat-label">Total Pastes</span>
+                        </div>
+                        <div class="stat-separator">/</div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="paste-views">∞</span>
+                            <span class="stat-label">Views</span>
+                        </div>
+                        <div class="stat-separator">/</div>
+                        <div class="stat-item">
+                            <span class="stat-value">24/7</span>
+                            <span class="stat-label">Online</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paste List -->
+                <div class="paste-grid" id="paste-grid">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Loading pastes...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Page -->
+            <div id="recent-page" class="page">
+                <h2 class="page-title">
+                    <span class="title-bracket">[</span>
+                    Recent Pastes
+                    <span class="title-bracket">]</span>
+                </h2>
+                <div class="paste-list" id="recent-list"></div>
+            </div>
+
+            <!-- About Page -->
+            <div id="about-page" class="page">
+                <div class="about-content">
+                    <h2 class="page-title">
+                        <span class="title-bracket">[</span>
+                        About BinPaste
+                        <span class="title-bracket">]</span>
+                    </h2>
+                    <div class="about-text">
+                        <p class="terminal-text">
+                            <span class="prompt">$</span> cat about.txt
+                        </p>
+                        <p>BinPaste is a minimalist paste sharing platform designed for developers, security researchers, and anyone who needs to share text or code quickly and anonymously.</p>
+                        <br>
+                        <p><strong>Features:</strong></p>
+                        <ul>
+                            <li>→ No registration required</li>
+                            <li>→ Syntax highlighting for code</li>
+                            <li>→ Anonymous sharing</li>
+                            <li>→ Clean, distraction-free interface</li>
+                            <li>→ Fast and lightweight</li>
+                        </ul>
+                        <br>
+                        <p class="terminal-text">
+                            <span class="prompt">$</span> echo "Built for the community, by the community"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Paste Modal -->
+    <div id="paste-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="close-modal">&times;</button>
+            <div class="paste-header">
+                <h2 class="paste-title" id="modal-title">Loading...</h2>
+                <div class="paste-meta">
+                    <span class="meta-item" id="modal-author"></span>
+                    <span class="meta-separator">•</span>
+                    <span class="meta-item" id="modal-date"></span>
+                    <span class="meta-separator">•</span>
+                    <span class="meta-item" id="modal-views"></span>
+                </div>
+            </div>
+            <div class="paste-tags" id="modal-tags"></div>
+            <div class="paste-actions">
+                <button class="action-btn" id="copy-btn">
+                    <span class="btn-icon">📋</span> Copy
+                </button>
+                <button class="action-btn" id="raw-btn">
+                    <span class="btn-icon">📄</span> Raw
+                </button>
+            </div>
+            <pre class="paste-content"><code id="modal-content">Loading content...</code></pre>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 BinPaste • For educational and legitimate use only</p>
+            <p class="footer-note">All content is user-generated • No illegal content allowed</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
