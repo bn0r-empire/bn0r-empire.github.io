@@ -66,15 +66,16 @@ async function loadPastes() {
             const data = await response.json();
             pastes = data.pastes || [];
         } else {
-            // Fallback: Load demo pastes
-            pastes = getDemoPastes();
+            // No index.json found - show empty state
+            pastes = [];
         }
         
         renderPastes();
         updateStats();
     } catch (error) {
         console.error('Error loading pastes:', error);
-        pastes = getDemoPastes();
+        // Don't load demo pastes - show empty state
+        pastes = [];
         renderPastes();
         updateStats();
     }
@@ -174,7 +175,21 @@ function renderPastes() {
     const grid = document.getElementById('paste-grid');
     
     if (pastes.length === 0) {
-        grid.innerHTML = '<div class="loading-spinner"><p>No pastes found</p></div>';
+        grid.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">📝</div>
+                <h3>No Pastes Yet</h3>
+                <p>Add paste files to the /pastes/ folder to get started.</p>
+                <p class="empty-hint">Create a paste file with metadata at the top:</p>
+                <pre class="empty-example">[Title:My Paste]
+[Author:Username]
+[Date:2026-03-01]
+[Tags:example]
+
+Your content here...</pre>
+                <p class="empty-hint">Then add it to pastes/index.json</p>
+            </div>
+        `;
         return;
     }
     
@@ -331,7 +346,8 @@ function updateStats() {
     // Animate count
     animateValue(totalPastes, 0, pastes.length, 1000);
     
-    const totalViews = pastes.reduce((sum, paste) => sum + paste.views, 0);
+    // Calculate total views, or show 0 if no pastes
+    const totalViews = pastes.length > 0 ? pastes.reduce((sum, paste) => sum + paste.views, 0) : 0;
     animateValue(pasteViews, 0, totalViews, 1000);
 }
 
