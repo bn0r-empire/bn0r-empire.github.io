@@ -209,6 +209,8 @@ function createPasteCard(paste, index) {
     card.className = 'paste-card';
     card.style.animationDelay = `${index * 0.1}s`;
     
+    const preview = paste.preview || (paste.content ? paste.content.substring(0, 100) : 'Click to view content...');
+    
     card.innerHTML = `
         <div class="paste-card-header">
             <div>
@@ -217,7 +219,7 @@ function createPasteCard(paste, index) {
             </div>
             <div class="paste-card-date">${paste.date}</div>
         </div>
-        <div class="paste-card-preview">${escapeHtml(paste.preview || paste.content.substring(0, 100))}</div>
+        <div class="paste-card-preview">${escapeHtml(preview)}</div>
         ${paste.tags && paste.tags.length > 0 ? `
             <div class="paste-tags">
                 ${paste.tags.map(tag => `<span class="paste-tag">${escapeHtml(tag)}</span>`).join('')}
@@ -277,16 +279,34 @@ function initModal() {
     });
 }
 
-function openPasteModal(paste) {
-    currentPaste = paste;
+async function openPasteModal(paste) {
     const modal = document.getElementById('paste-modal');
+    const contentElement = document.getElementById('modal-content');
+    
+    // Show modal with loading state
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    contentElement.textContent = 'Loading...';
+    
+    // Load content if not already loaded
+    if (!paste.content && paste.filename) {
+        const loadedPaste = await loadPasteContent(paste.filename);
+        if (loadedPaste) {
+            paste.content = loadedPaste.content;
+        } else {
+            contentElement.textContent = 'Error loading paste content';
+            return;
+        }
+    }
+    
+    currentPaste = paste;
     
     // Update modal content
     document.getElementById('modal-title').textContent = paste.title;
     document.getElementById('modal-author').textContent = `by ${paste.author}`;
     document.getElementById('modal-date').textContent = paste.date;
     document.getElementById('modal-views').textContent = `${paste.views} views`;
-    document.getElementById('modal-content').textContent = paste.content;
+    contentElement.textContent = paste.content || 'No content available';
     
     // Update tags
     const tagsContainer = document.getElementById('modal-tags');
@@ -298,10 +318,6 @@ function openPasteModal(paste) {
     } else {
         tagsContainer.style.display = 'none';
     }
-    
-    // Show modal
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
     
     // Increment views (in a real app, this would be server-side)
     paste.views++;
